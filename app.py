@@ -17,9 +17,9 @@ st.set_page_config(
 
 init_db()
 
-# 側邊欄 
+#側邊欄
 with st.sidebar:
-    st.title("📊 台股智慧分析")
+    st.title("台股智慧分析")
     st.markdown("---")
 
     stocks_df = list_stocks()
@@ -79,7 +79,7 @@ elif signal == "SELL":
 else:
     st.info("⚪ 目前訊號：**持有觀望 (HOLD)**")
 
-#主圖：K線 + 均線 
+# 主圖：K線 + 均線 
 rows = 1 + int(show_vol) + int(show_rsi)
 row_heights = [0.55]
 if show_vol: row_heights.append(0.2)
@@ -136,7 +136,7 @@ if not sell_df.empty:
         text=["▼"] * len(sell_df), textposition="top center",
     ), row=1, col=1)
 
-#新聞標記（黃色菱形）
+# 新聞標記（黃色菱形） 
 if show_news and not news_df.empty:
     news_dates = news_df["date"].unique()
     matched = merged[merged["date"].isin(news_dates)].copy()
@@ -199,12 +199,12 @@ fig.update_layout(
 )
 st.plotly_chart(fig, use_container_width=True)
 
-#新聞面板
-with st.expander("最新相關新聞", expanded=True):
+# 新聞面板 
+with st.expander("📰 最新相關新聞", expanded=True):
     col_btn, col_info = st.columns([1, 5])
 
     with col_btn:
-        if st.button("更新新聞"):
+        if st.button("🔄 更新新聞"):
             with st.spinner("爬取新聞中，請稍候..."):
                 fresh = fetch_cnyes_stock_news(stock_id, pages=2)
                 if not fresh.empty:
@@ -246,10 +246,10 @@ with st.expander("📋 原始資料 & 分析結果"):
         if val == "SELL": return "background-color: #26a69a; color: white"
         return ""
 
-    styled = display.iloc[::-1].style.applymap(color_signal, subset=["訊號"])
+    styled = display.iloc[::-1].style.map(color_signal, subset=["訊號"])
     st.dataframe(styled, use_container_width=True, height=300)
 
-# 統計摘要
+#統計摘要
 with st.expander("統計摘要"):
     c1, c2 = st.columns(2)
     with c1:
